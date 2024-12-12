@@ -1,0 +1,53 @@
+function handleFormSubmission(event) {
+    event.preventDefault();
+
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const pronouns = document.getElementById('pronouns').value;
+    const school = document.getElementById('school').value;
+    const nation = document.getElementById('nation').value;
+    const schoolYear = document.getElementById('schoolYear').value;
+    const instrument = document.getElementById('instrument').value;
+    const experience = document.getElementById('experience').value;
+    const hasTeacher = document.querySelector('input[name="hasTeacher"]:checked').value;
+
+    const appointmentData = {
+        firstName,
+        lastName,
+        phoneNumber,
+        pronouns,
+        school,
+        nation,
+        schoolYear,
+        instrument,
+        experience,
+        hasTeacher,
+    };
+
+    //replace this with whichever backend server we want to store the appointment data in
+    fetch('http://localhost:3000/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(appointmentData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        const successMessage = document.getElementById('successMessage');
+        successMessage.textContent = 'Scheduled';
+        successMessage.style.display = 'block';
+    })
+    .catch(error => {
+        console.error('Error: ', error);
+    });
+
+    document.getElementById('appointmentForm').reset();
+}
+
+window.onload = function() {
+    const form = document.getElementById('appointmentForm');
+    form.addEventListener('submit', handleFormSubmission);
+};
